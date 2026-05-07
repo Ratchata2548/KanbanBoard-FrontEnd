@@ -1,6 +1,7 @@
 import { useState , useEffect } from "react";
-import {View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
+import {View, Text, Image, StyleSheet, ActivityIndicator} from "react-native";
 import { useRouter } from "expo-router";
+import NavButton from "../components/NavButton";
 
 type Weather = {
     temp: number;
@@ -59,17 +60,9 @@ export default function Home() {
         
         {weather && !loading && (
             <View style={styles.card}>
-                <TouchableOpacity style={styles.button} onPress={() => router.push("/counter")}>
-                    <Text style={styles.buttonText}>🔢 Counter</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={() => router.push("/todo")}>
-                    <Text style={styles.buttonText}>📝 Todo</Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity style={styles.button} onPress={() => router.push("/user")}>
-                    <Text style={styles.buttonText}>👤 User</Text>
-                </TouchableOpacity>
+                <NavButton label="🔢 Counter" route="/counter" />
+                <NavButton label="📝 Todo" route="/todo" />
+                <NavButton label="👤 User" route="/user" />
 
                 <Text style={styles.city}>📍 {CITY} </Text>
                 <Image
@@ -105,20 +98,6 @@ const styles = StyleSheet.create ({
         shadowOpacity: 0.1,
         shadowRadius: 10,
         elevation: 4,
-    },
-    button: {
-        backgroundColor: "#6200ee",
-        paddingVertical: 14,
-        paddingHorizontal: 40,
-        borderRadius: 12,
-        width: "80%",
-        alignItems: "center",
-        marginTop: 8,
-    },
-    buttonText: { 
-        color: "#fff", 
-        fontSize: 16, 
-        fontWeight: "bold" 
     },
     city: { fontSize: 24, fontWeight: "bold", marginBottom: 8},
     icon: { width: 80, height: 80},

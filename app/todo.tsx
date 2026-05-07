@@ -1,7 +1,5 @@
 import { useState } from "react";
 import {
-  FlatList,
-  Modal,
   StyleSheet,
   Text,
   TextInput,
@@ -9,6 +7,8 @@ import {
   View,
 } from "react-native";
 import { Todo } from "../types/todo";
+import ModalTodo from "../components/modalTodo";
+import FlatListTodo from "../components/FlatListTodo";
 
 export default function TodoScreen() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -75,63 +75,19 @@ export default function TodoScreen() {
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
       </View>
-
-      {/* List */}
-      <FlatList
-        data={todos}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.todoItem}>
-            {/* Mark Done */}
-            <TouchableOpacity onPress={() => toggleDone(item.id)}>
-              <Text style={styles.check}>{item.done ? "✅" : "⬜"}</Text>
-            </TouchableOpacity>
-
-            {/* ข้อความ */}
-            <Text style={[styles.todoText, item.done && styles.doneText]}>
-              {item.text}
-            </Text>
-
-            {/* ปุ่มแก้ไข */}
-            <TouchableOpacity onPress={() => openEdit(item)}>
-              <Text style={styles.editBtn}>✏️</Text>
-            </TouchableOpacity>
-
-            {/* ปุ่มลบ */}
-            <TouchableOpacity onPress={() => deleteTodo(item.id)}>
-              <Text style={styles.deleteBtn}>🗑️</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        ListEmptyComponent={
-          <Text style={styles.empty}>ยังไม่มีรายการ กด + เพื่อเพิ่ม</Text>
-        }
+      <FlatListTodo
+      todos={todos}
+      onToggle={toggleDone}
+      onEdit={openEdit}
+      onDelete={deleteTodo}
       />
-
-      {/* Modal แก้ไข */}
-      <Modal visible={editTarget !== null} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalBox}>
-            <Text style={styles.modalTitle}>แก้ไขรายการ</Text>
-            <TextInput
-              style={styles.input}
-              value={editText}
-              onChangeText={setEditText}
-            />
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => setEditTarget(null)}
-              >
-                <Text style={styles.cancelText}>ยกเลิก</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.saveButton} onPress={saveEdit}>
-                <Text style={styles.saveText}>บันทึก</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ModalTodo
+      visible={editTarget !== null}
+      editText={editText}
+      onChangeText={setEditText}
+      onSave={saveEdit}
+      onCancel={() => setEditTarget(null)}
+      />
     </View>
   );
 }
@@ -158,49 +114,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addButtonText: { color: "#fff", fontSize: 28, fontWeight: "bold" },
-  todoItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 8,
-    gap: 8,
-  },
-  check: { fontSize: 20 },
-  todoText: { flex: 1, fontSize: 16 },
-  doneText: { textDecorationLine: "line-through", color: "#aaa" },
-  editBtn: { fontSize: 18 },
-  deleteBtn: { fontSize: 18 },
-  empty: { textAlign: "center", color: "#aaa", marginTop: 40, fontSize: 16 },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalBox: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 24,
-    width: "80%",
-    gap: 16,
-  },
-  modalTitle: { fontSize: 18, fontWeight: "bold" },
-  modalButtons: { flexDirection: "row", justifyContent: "flex-end", gap: 8 },
-  cancelButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-  cancelText: { color: "#555" },
-  saveButton: {
-    backgroundColor: "#6200ee",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-  },
-  saveText: { color: "#fff", fontWeight: "bold" },
 });
