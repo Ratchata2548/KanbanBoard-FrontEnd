@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "CountApp",
-    "slug": "CountApp",
-    "scheme": "countapp",
+    "name": "KanbanBoard",
+    "slug": "KanbanBoard",
+    "scheme": "kanbanboard",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
